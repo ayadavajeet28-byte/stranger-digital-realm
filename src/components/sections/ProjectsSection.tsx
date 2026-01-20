@@ -100,36 +100,43 @@ function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
       style={{ perspective: '1000px' }}
     >
       {/* Media Container */}
-      <div className="relative h-56 md:h-64 overflow-hidden">
-        {project.image && (
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          />
-        )}
+      <div className="relative h-56 md:h-64 overflow-hidden bg-muted">
+        {/* Thumbnail image - always visible */}
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          loading="eager"
+          onError={(e) => {
+            // Fallback gradient if image fails to load
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+        
+        {/* Fallback gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-muted via-muted/80 to-card -z-10" />
         
         {/* Always visible Play button overlay */}
         {project.video && (
           <button
             onClick={handlePlayClick}
-            className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+            className="absolute inset-0 flex items-center justify-center transition-all duration-300 z-20"
             aria-label={`Play ${project.title} video`}
           >
             {/* Background dim on hover */}
-            <div className="absolute inset-0 bg-background/30 group-hover:bg-background/50 transition-colors duration-300" />
+            <div className="absolute inset-0 bg-background/20 group-hover:bg-background/40 transition-colors duration-300" />
             
             {/* Play button - always visible */}
-            <div className="relative w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center glow-red transition-all duration-300 group-hover:scale-110 group-hover:bg-primary">
+            <div className="relative w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center glow-red transition-all duration-300 group-hover:scale-110 group-hover:bg-primary shadow-lg">
               <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
             </div>
           </button>
         )}
         
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
         
         {/* Category badge */}
-        <span className="absolute top-4 right-4 px-3 py-1 bg-primary/80 text-primary-foreground font-retro text-sm rounded z-10">
+        <span className="absolute top-4 right-4 px-3 py-1 bg-primary/80 text-primary-foreground font-retro text-sm rounded z-30">
           {project.category}
         </span>
       </div>
