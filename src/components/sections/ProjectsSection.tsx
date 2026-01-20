@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { LightMessage } from '@/components/decorative/ChristmasLights';
-import { Play, Pause } from 'lucide-react';
+import { Play } from 'lucide-react';
+import { VideoModal } from '@/components/ui/video-modal';
 
 // Import work images from PDF
 import workGraphicDesign from '@/assets/work-graphic-design.png';
@@ -56,11 +57,14 @@ const projects: Project[] = [
   },
 ];
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+interface ProjectCardProps {
+  project: Project;
+  index: number;
+  onPlayVideo: (video: string, title: string) => void;
+}
+
+function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -83,25 +87,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     );
   }, [index]);
 
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
+  const handlePlayClick = () => {
+    if (project.video) {
+      onPlayVideo(project.video, project.title);
     }
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleVideoClick = () => {
-    setShowVideo(true);
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.play();
-        setIsPlaying(true);
-      }
-    }, 100);
   };
 
   return (
@@ -112,53 +101,35 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       {/* Media Container */}
       <div className="relative h-56 md:h-64 overflow-hidden">
-        {!showVideo && project.image ? (
-          <>
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            {/* Play button overlay */}
-            {project.video && (
-              <button
-                onClick={handleVideoClick}
-                className="absolute inset-0 flex items-center justify-center bg-background/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              >
-                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center glow-red">
-                  <Play className="w-8 h-8 text-primary-foreground ml-1" />
-                </div>
-              </button>
-            )}
-          </>
-        ) : project.video ? (
-          <div className="relative w-full h-full">
-            <video
-              ref={videoRef}
-              src={project.video}
-              className="w-full h-full object-cover"
-              loop
-              playsInline
-              onClick={togglePlay}
-            />
-            {/* Video controls overlay */}
-            <button
-              onClick={togglePlay}
-              className="absolute bottom-4 right-4 p-2 bg-card/80 rounded-full hover:bg-primary transition-colors"
-            >
-              {isPlaying ? (
-                <Pause className="w-5 h-5" />
-              ) : (
-                <Play className="w-5 h-5 ml-0.5" />
-              )}
-            </button>
-          </div>
-        ) : null}
+        {project.image && (
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        )}
+        
+        {/* Always visible Play button overlay */}
+        {project.video && (
+          <button
+            onClick={handlePlayClick}
+            className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+            aria-label={`Play ${project.title} video`}
+          >
+            {/* Background dim on hover */}
+            <div className="absolute inset-0 bg-background/30 group-hover:bg-background/50 transition-colors duration-300" />
+            
+            {/* Play button - always visible */}
+            <div className="relative w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center glow-red transition-all duration-300 group-hover:scale-110 group-hover:bg-primary">
+              <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
+            </div>
+          </button>
+        )}
         
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent pointer-events-none" />
         
         {/* Category badge */}
-        <span className="absolute top-4 right-4 px-3 py-1 bg-primary/80 text-primary-foreground font-retro text-sm rounded">
+        <span className="absolute top-4 right-4 px-3 py-1 bg-primary/80 text-primary-foreground font-retro text-sm rounded z-10">
           {project.category}
         </span>
       </div>
@@ -186,6 +157,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<{ src: string; title: string } | null>(null);
+
+  const handlePlayVideo = (videoSrc: string, title: string) => {
+    setActiveVideo({ src: videoSrc, title });
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setActiveVideo(null);
+  };
 
   return (
     <section
@@ -208,10 +191,25 @@ export function ProjectsSection() {
         {/* Projects grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+            <ProjectCard 
+              key={project.id} 
+              project={project} 
+              index={index} 
+              onPlayVideo={handlePlayVideo}
+            />
           ))}
         </div>
       </div>
+
+      {/* Video Modal */}
+      {activeVideo && (
+        <VideoModal
+          isOpen={modalOpen}
+          onClose={handleCloseModal}
+          videoSrc={activeVideo.src}
+          title={activeVideo.title}
+        />
+      )}
     </section>
   );
 }
