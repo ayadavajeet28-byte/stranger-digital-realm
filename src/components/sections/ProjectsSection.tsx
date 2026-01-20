@@ -65,6 +65,8 @@ interface ProjectCardProps {
 
 function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -93,6 +95,16 @@ function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
     }
   };
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoaded(true);
+  };
+
   return (
     <div
       ref={cardRef}
@@ -100,21 +112,37 @@ function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
       style={{ perspective: '1000px' }}
     >
       {/* Media Container */}
-      <div className="relative h-56 md:h-64 overflow-hidden bg-muted">
-        {/* Thumbnail image - always visible */}
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="eager"
-          onError={(e) => {
-            // Fallback gradient if image fails to load
-            e.currentTarget.style.display = 'none';
-          }}
-        />
+      <div className="relative h-56 md:h-64 overflow-hidden">
+        {/* Solid background for transparent images */}
+        <div className="absolute inset-0 bg-gradient-to-br from-card via-muted to-background" />
         
-        {/* Fallback gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-muted via-muted/80 to-card -z-10" />
+        {/* Loading placeholder */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-muted z-5">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+        
+        {/* Thumbnail image */}
+        {project.image && !imageError && (
+          <img
+            src={project.image}
+            alt={project.title}
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            loading="eager"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+          />
+        )}
+        
+        {/* Fallback gradient for failed images */}
+        {imageError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-muted to-background flex items-center justify-center">
+            <span className="font-retro text-muted-foreground text-sm">{project.category}</span>
+          </div>
+        )}
         
         {/* Always visible Play button overlay */}
         {project.video && (
