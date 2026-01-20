@@ -41,7 +41,12 @@ export function Navigation() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Use scrollTo with offset to ensure content is visible
+      const offset = id === 'hero' ? 0 : element.offsetTop;
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
     }
   };
 
