@@ -3,12 +3,12 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { LightMessage } from '@/components/decorative/ChristmasLights';
 import { 
-  Code2, 
   Palette, 
-  Server, 
-  Layers, 
-  Users, 
-  Zap 
+  PenTool, 
+  Layout, 
+  Video, 
+  BarChart3,
+  Figma
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,15 +22,15 @@ interface Skill {
 }
 
 const skills: Skill[] = [
-  { name: 'React / Vue.js', level: 90, icon: <Code2 />, color: 'bg-light-blue', category: 'Front-End' },
-  { name: 'TypeScript', level: 85, icon: <Code2 />, color: 'bg-light-yellow', category: 'Front-End' },
-  { name: 'Three.js / WebGL', level: 75, icon: <Layers />, color: 'bg-light-pink', category: 'Front-End' },
-  { name: 'UI/UX Design', level: 80, icon: <Palette />, color: 'bg-light-green', category: 'Design' },
-  { name: 'Figma / Adobe XD', level: 85, icon: <Palette />, color: 'bg-light-orange', category: 'Design' },
-  { name: 'Node.js', level: 80, icon: <Server />, color: 'bg-light-red', category: 'Back-End' },
-  { name: 'PostgreSQL / MongoDB', level: 75, icon: <Server />, color: 'bg-light-blue', category: 'Back-End' },
-  { name: 'Project Management', level: 85, icon: <Users />, color: 'bg-light-pink', category: 'Leadership' },
-  { name: 'Agile / Scrum', level: 80, icon: <Zap />, color: 'bg-light-yellow', category: 'Leadership' },
+  { name: 'UI/UX Design', level: 95, icon: <Layout />, color: 'bg-light-blue', category: 'Design' },
+  { name: 'Graphic Design', level: 95, icon: <Palette />, color: 'bg-light-pink', category: 'Design' },
+  { name: 'Illustration', level: 90, icon: <PenTool />, color: 'bg-light-yellow', category: 'Design' },
+  { name: 'Motion Design', level: 85, icon: <Video />, color: 'bg-light-green', category: 'Motion' },
+  { name: 'Video Editing', level: 80, icon: <Video />, color: 'bg-light-orange', category: 'Motion' },
+  { name: 'Figma / Adobe XD', level: 95, icon: <Figma />, color: 'bg-light-red', category: 'Tools' },
+  { name: 'Adobe Creative Suite', level: 90, icon: <Palette />, color: 'bg-light-blue', category: 'Tools' },
+  { name: 'Tableau / Power BI', level: 85, icon: <BarChart3 />, color: 'bg-light-pink', category: 'Dashboard' },
+  { name: 'Web Design', level: 88, icon: <Layout />, color: 'bg-light-yellow', category: 'Development' },
 ];
 
 function SkillBar({ skill, index }: { skill: Skill; index: number }) {
@@ -145,7 +145,7 @@ export function SkillsSection() {
           </h2>
           <LightMessage message="SKILL ZONE" className="mb-8" />
           <p className="font-retro text-xl text-muted-foreground">
-            Powers unlocked through countless nights of exploration
+            Visual communication, branding, typography, composition, color theory, storytelling through visuals
           </p>
         </div>
 

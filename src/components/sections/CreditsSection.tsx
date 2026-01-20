@@ -2,23 +2,22 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { LightMessage, ChristmasLights } from '@/components/decorative/ChristmasLights';
-import { Heart, Github, Linkedin, Mail } from 'lucide-react';
+import { Heart, Mail, Phone, MessageCircle } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const tools = [
-  { category: '3D & Animation', items: ['React Three Fiber', 'Three.js', 'Drei', 'GSAP'] },
-  { category: 'Framework & UI', items: ['React', 'TypeScript', 'Tailwind CSS', 'Zustand'] },
-  { category: 'Design', items: ['Figma', 'Adobe Creative Suite'] },
-  { category: 'Assets & Inspiration', items: ['Unsplash', 'Stranger Things Universe', 'Synthwave Aesthetic'] },
+  { category: 'Design Tools', items: ['Figma', 'Adobe XD', 'Adobe Creative Suite'] },
+  { category: 'Dashboard & Data', items: ['Tableau', 'Power BI'] },
+  { category: 'Motion & Video', items: ['After Effects', 'Premiere Pro'] },
+  { category: 'Development', items: ['React', 'TypeScript', 'Tailwind CSS', 'Three.js'] },
 ];
 
-const acknowledgments = [
-  'The Duffer Brothers for creating an iconic universe',
-  'The open-source community for incredible tools',
-  'Coffee, for obvious reasons',
-  'You, for exploring my digital dimension',
-];
+const contactInfo = {
+  email: 'mohantyelisha2@gmail.com',
+  phone: '7751847127',
+  whatsapp: '8658487643',
+};
 
 export function CreditsSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -58,12 +57,52 @@ export function CreditsSection() {
           <ChristmasLights count={26} className="opacity-50" />
         </div>
 
-        {/* Title */}
+        {/* Let's Work Title */}
         <div className="text-center mb-16">
-          <LightMessage message="CREDITS" className="mb-8" />
-          <p className="font-retro text-xl text-muted-foreground">
-            The friends who helped me on this journey
-          </p>
+          <LightMessage message="LETS WORK" className="mb-8" />
+          <h2 className="font-display text-4xl md:text-6xl text-primary tracking-wider mb-4">
+            Contact Me
+          </h2>
+        </div>
+
+        {/* Contact Info */}
+        <div className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-lg p-8 mb-12 glow-red">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="group flex flex-col items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300"
+            >
+              <Mail className="w-8 h-8 text-light-red group-hover:scale-110 transition-transform" />
+              <span className="font-retro text-lg text-foreground">Email</span>
+              <span className="font-retro text-sm text-muted-foreground break-all">
+                {contactInfo.email}
+              </span>
+            </a>
+            
+            <a
+              href={`tel:${contactInfo.phone}`}
+              className="group flex flex-col items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300"
+            >
+              <Phone className="w-8 h-8 text-light-blue group-hover:scale-110 transition-transform" />
+              <span className="font-retro text-lg text-foreground">Call</span>
+              <span className="font-retro text-sm text-muted-foreground">
+                {contactInfo.phone}
+              </span>
+            </a>
+            
+            <a
+              href={`https://wa.me/${contactInfo.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300"
+            >
+              <MessageCircle className="w-8 h-8 text-light-green group-hover:scale-110 transition-transform" />
+              <span className="font-retro text-lg text-foreground">WhatsApp</span>
+              <span className="font-retro text-sm text-muted-foreground">
+                {contactInfo.whatsapp}
+              </span>
+            </a>
+          </div>
         </div>
 
         {/* Tools used */}
@@ -89,55 +128,20 @@ export function CreditsSection() {
           ))}
         </div>
 
-        {/* Acknowledgments */}
-        <div className="text-center mb-16">
-          <h3 className="font-display text-2xl text-primary mb-6 tracking-wider">
-            Special Thanks
-          </h3>
-          <div className="space-y-3">
-            {acknowledgments.map((ack, index) => (
-              <p
-                key={index}
-                className="font-retro text-lg text-muted-foreground"
-              >
-                <Heart className="inline w-4 h-4 text-light-red mr-2" />
-                {ack}
-              </p>
-            ))}
-          </div>
-        </div>
-
-        {/* Contact / Social links */}
-        <div className="text-center">
-          <h3 className="font-display text-2xl text-primary mb-6 tracking-wider">
-            Connect With Me
-          </h3>
-          <div className="flex justify-center gap-6">
-            {[
-              { icon: <Github />, label: 'GitHub', href: '#' },
-              { icon: <Linkedin />, label: 'LinkedIn', href: '#' },
-              { icon: <Mail />, label: 'Email', href: 'mailto:hello@example.com' },
-            ].map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-border hover:border-primary hover:glow-red transition-all duration-300"
-              >
-                <span className="text-muted-foreground group-hover:text-primary transition-colors">
-                  {link.icon}
-                </span>
-                <span className="font-retro text-sm text-muted-foreground group-hover:text-primary">
-                  {link.label}
-                </span>
-              </a>
-            ))}
-          </div>
+        {/* Thank You */}
+        <div className="text-center mb-12">
+          <h2 className="stranger-title text-6xl md:text-8xl mb-4">
+            THANK
+          </h2>
+          <h2 className="stranger-title text-6xl md:text-8xl">
+            YOU
+          </h2>
         </div>
 
         {/* Footer */}
         <footer className="mt-20 pt-8 border-t border-border text-center">
           <p className="font-retro text-muted-foreground">
-            Made with <Heart className="inline w-4 h-4 text-light-red mx-1" /> in the Upside Down
+            Made with <Heart className="inline w-4 h-4 text-light-red mx-1" /> by Elisha Mohanty
           </p>
           <p className="font-retro text-sm text-muted-foreground/50 mt-2">
             © {new Date().getFullYear()} • All rights reserved
