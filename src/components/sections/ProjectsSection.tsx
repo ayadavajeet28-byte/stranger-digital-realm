@@ -60,7 +60,7 @@ const projects: Project[] = [
 interface ProjectCardProps {
   project: Project;
   index: number;
-  onPlayVideo: (video: string, title: string) => void;
+  onPlayVideo: (video: string, title: string, poster?: string) => void;
 }
 
 function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
@@ -89,7 +89,7 @@ function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
 
   const handlePlayClick = () => {
     if (project.video) {
-      onPlayVideo(project.video, project.title);
+      onPlayVideo(project.video, project.title, project.image);
     }
   };
 
@@ -158,10 +158,10 @@ function ProjectCard({ project, index, onPlayVideo }: ProjectCardProps) {
 export function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeVideo, setActiveVideo] = useState<{ src: string; title: string } | null>(null);
+  const [activeVideo, setActiveVideo] = useState<{ src: string; title: string; poster?: string } | null>(null);
 
-  const handlePlayVideo = (videoSrc: string, title: string) => {
-    setActiveVideo({ src: videoSrc, title });
+  const handlePlayVideo = (videoSrc: string, title: string, poster?: string) => {
+    setActiveVideo({ src: videoSrc, title, poster });
     setModalOpen(true);
   };
 
@@ -207,6 +207,7 @@ export function ProjectsSection() {
           isOpen={modalOpen}
           onClose={handleCloseModal}
           videoSrc={activeVideo.src}
+          posterSrc={activeVideo.poster}
           title={activeVideo.title}
         />
       )}
