@@ -1,95 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=VT323&family=Special+Elite&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Stranger Things Dark Theme */
+    --background: 0 0% 3%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Upside Down Red */
+    --primary: 0 85% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Dark Purple Mist */
+    --secondary: 280 60% 15%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Fog Gray */
+    --muted: 240 5% 15%;
+    --muted-foreground: 240 5% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Neon Pink Accent */
+    --accent: 330 100% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Electric Blue */
+    --electric: 200 100% 50%;
+    --electric-foreground: 0 0% 100%;
+
+    /* Christmas Light Colors */
+    --light-red: 0 100% 50%;
+    --light-blue: 200 100% 50%;
+    --light-yellow: 50 100% 50%;
+    --light-green: 120 100% 40%;
+    --light-pink: 330 100% 60%;
+    --light-orange: 30 100% 50%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 85% 45%;
 
     --radius: 0.5rem;
 
+    /* Gradients */
+    --gradient-upside-down: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(0 70% 15%) 50%, hsl(280 60% 10%) 100%);
+    --gradient-portal: radial-gradient(ellipse at center, hsl(330 100% 60% / 0.3) 0%, hsl(280 60% 15% / 0.5) 50%, transparent 70%);
+    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(0 0% 3% / 0.8) 100%);
+    
+    /* Shadows */
+    --shadow-glow-red: 0 0 30px hsl(0 85% 45% / 0.5), 0 0 60px hsl(0 85% 45% / 0.3);
+    --shadow-glow-pink: 0 0 20px hsl(330 100% 60% / 0.5), 0 0 40px hsl(330 100% 60% / 0.3);
+    --shadow-glow-blue: 0 0 20px hsl(200 100% 50% / 0.5), 0 0 40px hsl(200 100% 50% / 0.3);
+
+    /* Fonts */
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-retro: 'VT323', monospace;
+    --font-typewriter: 'Special Elite', cursive;
+
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -101,5 +86,250 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-retro);
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  /* Typography */
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-retro {
+    font-family: var(--font-retro);
+  }
+
+  .font-typewriter {
+    font-family: var(--font-typewriter);
+  }
+
+  /* Stranger Things Title Effect */
+  .stranger-title {
+    font-family: var(--font-display);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+    text-shadow: 
+      0 0 10px hsl(var(--primary) / 0.8),
+      0 0 20px hsl(var(--primary) / 0.6),
+      0 0 40px hsl(var(--primary) / 0.4),
+      0 0 80px hsl(var(--primary) / 0.2);
+  }
+
+  /* Flickering Light Effect */
+  .flicker {
+    animation: flicker 3s infinite;
+  }
+
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+    }
+    20%, 24%, 55% {
+      opacity: 0.4;
+    }
+  }
+
+  /* Christmas Light Glow */
+  .christmas-light {
+    border-radius: 50%;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      filter: brightness(1) blur(0px);
+      box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+    }
+    50% {
+      filter: brightness(1.5) blur(1px);
+      box-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor;
+    }
+  }
+
+  /* Portal Effect */
+  .portal-glow {
+    position: relative;
+  }
+
+  .portal-glow::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: var(--gradient-portal);
+    border-radius: 50%;
+    animation: portal-pulse 4s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  @keyframes portal-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+  }
+
+  /* Upside Down Effect */
+  .upside-down {
+    filter: hue-rotate(180deg) saturate(0.5);
+  }
+
+  /* Static Noise */
+  .static-noise {
+    position: relative;
+  }
+
+  .static-noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    animation: noise 0.5s steps(10) infinite;
+  }
+
+  @keyframes noise {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -5%); }
+    20% { transform: translate(-10%, 5%); }
+    30% { transform: translate(5%, -10%); }
+    40% { transform: translate(-5%, 15%); }
+    50% { transform: translate(-10%, 5%); }
+    60% { transform: translate(15%, 0); }
+    70% { transform: translate(0, 10%); }
+    80% { transform: translate(-15%, 0); }
+    90% { transform: translate(10%, 5%); }
+  }
+
+  /* Glitch Effect */
+  .glitch {
+    position: relative;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    animation: glitch-1 2s infinite linear alternate-reverse;
+    color: hsl(var(--electric));
+    z-index: -1;
+  }
+
+  .glitch::after {
+    animation: glitch-2 3s infinite linear alternate-reverse;
+    color: hsl(var(--accent));
+    z-index: -2;
+  }
+
+  @keyframes glitch-1 {
+    0%, 100% { clip-path: inset(0 0 95% 0); transform: translate(-2px, 0); }
+    20% { clip-path: inset(30% 0 60% 0); transform: translate(2px, 0); }
+    40% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 0); }
+    60% { clip-path: inset(10% 0 85% 0); transform: translate(2px, 0); }
+    80% { clip-path: inset(50% 0 30% 0); transform: translate(-2px, 0); }
+  }
+
+  @keyframes glitch-2 {
+    0%, 100% { clip-path: inset(80% 0 5% 0); transform: translate(2px, 0); }
+    20% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 0); }
+    40% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 0); }
+    60% { clip-path: inset(30% 0 60% 0); transform: translate(-2px, 0); }
+    80% { clip-path: inset(0 0 90% 0); transform: translate(2px, 0); }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    animation: bounce-down 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce-down {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
+
+  /* Gradient backgrounds */
+  .bg-upside-down {
+    background: var(--gradient-upside-down);
+  }
+
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  /* Glow effects */
+  .glow-red {
+    box-shadow: var(--shadow-glow-red);
+  }
+
+  .glow-pink {
+    box-shadow: var(--shadow-glow-pink);
+  }
+
+  .glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+  }
+
+  .text-glow-red {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.8), 0 0 20px hsl(var(--primary) / 0.6);
+  }
+
+  .text-glow-pink {
+    text-shadow: 0 0 10px hsl(var(--accent) / 0.8), 0 0 20px hsl(var(--accent) / 0.6);
+  }
+
+  .text-glow-blue {
+    text-shadow: 0 0 10px hsl(var(--electric) / 0.8), 0 0 20px hsl(var(--electric) / 0.6);
+  }
+
+  /* Scanlines */
+  .scanlines {
+    position: relative;
+  }
+
+  .scanlines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(0 0% 0% / 0.1) 2px,
+      hsl(0 0% 0% / 0.1) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Fog overlay */
+  .fog-overlay {
+    background: linear-gradient(
+      180deg,
+      hsl(280 60% 5% / 0.3) 0%,
+      transparent 50%,
+      hsl(0 70% 10% / 0.2) 100%
+    );
   }
 }
