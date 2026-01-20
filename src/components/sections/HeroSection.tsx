@@ -1,20 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useAppStore } from '@/store/useAppStore';
 import { Volume2, VolumeX, Monitor, ChevronDown } from 'lucide-react';
 import { UpsideDownScene } from '@/components/3d/UpsideDownScene';
 import portalBg from '@/assets/upside-down-portal.jpg';
 
-export function HeroSection() {
+interface HeroSectionProps {
+  isOverlay?: boolean;
+}
+
+export function HeroSection({ isOverlay = false }: HeroSectionProps) {
   const { soundEnabled, setSoundEnabled, setHasEntered, hasEntered } = useAppStore();
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const [showContent, setShowContent] = useState(true);
 
   useEffect(() => {
     if (!titleRef.current) return;
     
-    // Initial animation
     gsap.set(titleRef.current, { opacity: 1 });
     
     const tl = gsap.timeline();
@@ -32,6 +34,8 @@ export function HeroSection() {
   }, []);
 
   const handleEnter = () => {
+    if (!isOverlay) return;
+    
     setHasEntered(true);
     gsap.to(heroRef.current, {
       opacity: 0,
@@ -44,14 +48,21 @@ export function HeroSection() {
     });
   };
 
-  if (hasEntered) return null;
+  // If this is the overlay version and user has entered, hide it
+  if (isOverlay && hasEntered) return null;
+
+  // Determine wrapper classes based on mode
+  const wrapperClasses = isOverlay
+    ? "fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
+    : "min-h-screen flex flex-col items-center justify-center overflow-hidden relative";
 
   return (
     <div 
       ref={heroRef}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
+      id={isOverlay ? undefined : "hero"}
+      className={wrapperClasses}
     >
-      {/* Background Image */}
+      {/* Background Image - Preloaded */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${portalBg})` }}
@@ -87,8 +98,8 @@ export function HeroSection() {
           </span>
         </h1>
 
-        {/* Subtitle hints */}
-        {showContent && (
+        {/* Show controls only on overlay, scroll hint on inline */}
+        {isOverlay ? (
           <div className="space-y-6 animate-fade-in-up">
             {/* Sound toggle */}
             <div className="flex items-center justify-center gap-3 text-muted-foreground">
@@ -126,6 +137,11 @@ export function HeroSection() {
               <span className="font-retro text-sm mb-2">or scroll to discover</span>
               <ChevronDown className="w-6 h-6" />
             </div>
+          </div>
+        ) : (
+          <div className="mt-8 flex flex-col items-center text-muted-foreground scroll-indicator">
+            <span className="font-retro text-xl">Scroll down to explore my portfolio</span>
+            <ChevronDown className="w-6 h-6 mt-4" />
           </div>
         )}
       </div>
