@@ -66,8 +66,23 @@ const Index = () => {
 
         {/* Sections */}
         <main>
-          {/* Spacer for hero section */}
-          <div id="hero" className="h-screen" />
+          {/* Hero section - visible after entering */}
+          <section id="hero" className="min-h-screen flex items-center justify-center relative">
+            <div className="text-center px-4">
+              <h1 className="stranger-title text-5xl sm:text-7xl md:text-8xl lg:text-9xl mb-6 flicker">
+                Welcome
+              </h1>
+              <p className="font-display text-2xl sm:text-4xl md:text-5xl tracking-[0.5em] text-foreground/80 mb-4">
+                to my
+              </p>
+              <h1 className="stranger-title text-5xl sm:text-7xl md:text-8xl lg:text-9xl flicker" style={{ animationDelay: '0.5s' }}>
+                World
+              </h1>
+              <p className="mt-8 font-retro text-xl text-muted-foreground">
+                Scroll down to explore my portfolio
+              </p>
+            </div>
+          </section>
           
           <AboutSection />
           <ProjectsSection />
