@@ -6,10 +6,8 @@ import { Play } from 'lucide-react';
 import { VideoModal } from '@/components/ui/video-modal';
 
 // Import work images
-import workGraphicDesign from '@/assets/work-graphic-design.png';
-import workIllustration from '@/assets/work-illustration.png';
-import workTypography from '@/assets/work-typography.png';
-import workMotion from '@/assets/work-motion.png';
+import workIllustrationCombined from '@/assets/work-illustration-combined.png';
+import workMotionVideo from '@/assets/vedio.mp4';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,38 +15,37 @@ gsap.registerPlugin(ScrollTrigger);
 const categories = [
   {
     id: 'illustration',
-    title: 'Graphic Designer & Illustration Folio',
+    title: 'Illustration / Branding / Visual Content',
     description: 'A collection of graphic design work featuring branding, visual identity, and creative illustrations.',
     items: [
-      { id: 1, image: workGraphicDesign, title: 'Brand Identity Design' },
-      { id: 2, image: workIllustration, title: 'Creative Illustrations' },
-    ],
-  },
-  {
-    id: 'typography',
-    title: 'Pamphlets / Typography / Web Designing',
-    description: 'Where information meets visual character. Conversion-focused websites with distinctive typography.',
-    items: [
-      { id: 3, image: workTypography, title: 'Typography & Web Design' },
-    ],
-  },
-  {
-    id: 'motion',
-    title: 'Motion Graphics / Branding',
-    description: 'Dynamic motion graphics and branding projects that bring stories to life.',
-    items: [
-      { id: 4, image: workMotion, title: 'Motion & Branding' },
+      { id: 1, image: workIllustrationCombined, title: 'Graphic & Illustration' },
     ],
   },
   {
     id: 'genai',
-    title: 'Gen AI',
+    title: 'Gen AI / UGC Ad',
     description: 'AI-powered creative explorations and generative art projects.',
     items: [
-      { id: 5, video: '/videos/project-video-1.mp4', poster: workGraphicDesign, title: 'AI Creative Project 1' },
-      { id: 6, video: '/videos/project-video-2.mp4', poster: workIllustration, title: 'AI Creative Project 2' },
-      { id: 7, video: '/videos/project-video-3.mp4', poster: workTypography, title: 'AI Creative Project 3' },
-      { id: 8, video: '/videos/project-video-4.mp4', poster: workMotion, title: 'AI Creative Project 4' },
+      { id: 5, video: '/videos/project-video-1.mp4', title: 'AI Creative Project 1' },
+      { id: 6, video: '/videos/project-video-2.mp4', title: 'AI Creative Project 2' },
+      { id: 7, video: '/videos/project-video-3.mp4', title: 'AI Creative Project 3' },
+      { id: 8, video: '/videos/project-video-4.mp4', title: 'AI Creative Project 4' },
+    ],
+  },
+  {
+    id: 'motion',
+    title: 'Motion Graphics',
+    description: 'Dynamic motion graphics and branding projects that bring stories to life.',
+    items: [
+      { id: 4, video: workMotionVideo, title: 'Motion & Branding' },
+    ],
+  },
+  {
+    id: 'typography',
+    title: 'Typography / Branding',
+    description: 'Where information meets visual character. Conversion-focused websites with distinctive typography.',
+    items: [
+      { id: 3, image: workIllustrationCombined, title: 'Typography & Web Design' },
     ],
   },
 ];
@@ -56,10 +53,10 @@ const categories = [
 interface CategorySectionProps {
   category: typeof categories[0];
   index: number;
-  onPlayVideo: (video: string, title: string, poster?: string) => void;
+  onViewMedia: (src: string, type: 'video' | 'image', title: string, poster?: string) => void;
 }
 
-function CategorySection({ category, index, onPlayVideo }: CategorySectionProps) {
+function CategorySection({ category, index, onViewMedia }: CategorySectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -82,12 +79,14 @@ function CategorySection({ category, index, onPlayVideo }: CategorySectionProps)
     );
   }, []);
 
-  const isGenAI = category.id === 'genai';
+  const isVideoCategory = ['genai', 'motion'].includes(category.id);
+  const isSimpleLayout = ['illustration', 'typography', 'motion'].includes(category.id);
+  const isConstrainedWidth = ['illustration', 'typography', 'motion'].includes(category.id);
 
   return (
-    <div ref={sectionRef} className="mb-20 last:mb-0">
+    <div ref={sectionRef} className="pb-40 last:pb-0">
       {/* Category Header */}
-      <div className="mb-8">
+      <div className="mb-16">
         <h3
           ref={titleRef}
           className="font-display text-2xl md:text-3xl text-primary mb-3 tracking-wide inline-block px-4 py-2 border border-primary/50 rounded-lg bg-primary/10"
@@ -100,20 +99,21 @@ function CategorySection({ category, index, onPlayVideo }: CategorySectionProps)
       </div>
 
       {/* Items Grid */}
-      <div className={`grid gap-6 ${
-        category.items.length === 1 
-          ? 'grid-cols-1 max-w-2xl' 
-          : category.items.length === 2 
-            ? 'grid-cols-1 md:grid-cols-2' 
+      <div className={`grid gap-6 ${isConstrainedWidth ? 'max-w-5xl mx-auto' : ''
+        } ${category.items.length === 1
+          ? 'grid-cols-1 w-full'
+          : category.items.length === 2
+            ? 'grid-cols-1 md:grid-cols-2'
             : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-      }`}>
+        }`}>
         {category.items.map((item, itemIndex) => (
           <ItemCard
             key={item.id}
             item={item}
             index={itemIndex}
-            isVideo={isGenAI}
-            onPlayVideo={onPlayVideo}
+            isVideo={isVideoCategory}
+            isSimple={isSimpleLayout}
+            onViewMedia={onViewMedia}
             parentIndex={index}
           />
         ))}
@@ -133,11 +133,13 @@ interface ItemCardProps {
   index: number;
   parentIndex: number;
   isVideo: boolean;
-  onPlayVideo: (video: string, title: string, poster?: string) => void;
+  isSimple?: boolean;
+  onViewMedia: (src: string, type: 'video' | 'image', title: string, poster?: string) => void;
 }
 
-function ItemCard({ item, index, parentIndex, isVideo, onPlayVideo }: ItemCardProps) {
+function ItemCard({ item, index, parentIndex, isVideo, isSimple, onViewMedia }: ItemCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -162,21 +164,69 @@ function ItemCard({ item, index, parentIndex, isVideo, onPlayVideo }: ItemCardPr
     );
   }, [index]);
 
+  // Set initial time for video thumbnail
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0.1;
+    }
+  }, []);
+
   const handleClick = () => {
     if (isVideo && item.video) {
-      onPlayVideo(item.video, item.title, item.poster || item.image);
+      onViewMedia(item.video, 'video', item.title, item.poster || item.image);
+    } else if (item.image) {
+      onViewMedia(item.image, 'image', item.title);
     }
   };
 
   const displayImage = item.poster || item.image;
 
+  if (isSimple) {
+    return (
+      <div
+        ref={cardRef}
+        className="w-full relative cursor-pointer hover:opacity-95 transition-opacity duration-300 group"
+        onClick={handleClick}
+      >
+        {displayImage ? (
+          <img
+            src={displayImage}
+            alt={item.title}
+            className="w-full h-auto rounded-lg border border-border shadow-md"
+            loading="eager"
+          />
+        ) : isVideo && item.video ? (
+          <>
+            <video
+              ref={videoRef}
+              src={item.video}
+              className="w-full h-auto rounded-lg border border-border shadow-md"
+              muted
+              playsInline
+              preload="metadata"
+              onLoadedData={() => setImageLoaded(true)}
+            />
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="absolute inset-0 bg-background/10 group-hover:bg-background/30 transition-colors duration-300 rounded-lg" />
+              <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/90 flex items-center justify-center glow-red transition-all duration-300 group-hover:scale-110 group-hover:bg-primary shadow-lg">
+                <Play className="w-6 h-6 md:w-7 md:h-7 text-primary-foreground ml-1" fill="currentColor" />
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="w-full h-64 bg-muted flex items-center justify-center rounded-lg border border-border">
+            <span className="font-retro text-muted-foreground">{item.title}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       ref={cardRef}
-      className={`group relative bg-card/50 backdrop-blur-sm border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-500 ${
-        isVideo ? 'cursor-pointer' : ''
-      }`}
-      onClick={isVideo ? handleClick : undefined}
+      className={`group relative bg-card/50 backdrop-blur-sm border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-500 cursor-pointer`}
+      onClick={handleClick}
     >
       {/* Media Container */}
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -191,13 +241,12 @@ function ItemCard({ item, index, parentIndex, isVideo, onPlayVideo }: ItemCardPr
         )}
 
         {/* Image */}
-        {displayImage && !imageError && (
+        {displayImage && !imageError ? (
           <img
             src={displayImage}
             alt={item.title}
-            className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
             loading="eager"
             onLoad={() => {
               setImageLoaded(true);
@@ -208,21 +257,42 @@ function ItemCard({ item, index, parentIndex, isVideo, onPlayVideo }: ItemCardPr
               setImageLoaded(true);
             }}
           />
-        )}
+        ) : isVideo && item.video ? (
+          <video
+            ref={videoRef}
+            src={item.video}
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            muted
+            playsInline
+            preload="metadata"
+            onLoadedData={() => setImageLoaded(true)}
+          />
+        ) : null}
 
         {/* Fallback for failed images */}
-        {imageError && (
+        {(imageError || (!displayImage && !item.video)) && (
           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-muted to-background flex items-center justify-center">
             <span className="font-retro text-muted-foreground text-sm">{item.title}</span>
           </div>
         )}
 
-        {/* Video play overlay */}
+        {/* Video play overlay - Only for videos */}
         {isVideo && (
           <div className="absolute inset-0 flex items-center justify-center z-20">
             <div className="absolute inset-0 bg-background/20 group-hover:bg-background/40 transition-colors duration-300" />
             <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/90 flex items-center justify-center glow-red transition-all duration-300 group-hover:scale-110 group-hover:bg-primary shadow-lg">
               <Play className="w-6 h-6 md:w-7 md:h-7 text-primary-foreground ml-1" fill="currentColor" />
+            </div>
+          </div>
+        )}
+
+        {/* Image view overlay - Only for images */}
+        {!isVideo && (
+          <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 bg-background/20" />
+            <div className="relative w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center glow-red shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+              <div className="w-5 h-5 border-2 border-primary-foreground rounded-full" />
             </div>
           </div>
         )}
@@ -252,16 +322,16 @@ function ItemCard({ item, index, parentIndex, isVideo, onPlayVideo }: ItemCardPr
 export function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeVideo, setActiveVideo] = useState<{ src: string; title: string; poster?: string } | null>(null);
+  const [activeMedia, setActiveMedia] = useState<{ src: string; type: 'video' | 'image'; title: string; poster?: string } | null>(null);
 
-  const handlePlayVideo = (videoSrc: string, title: string, poster?: string) => {
-    setActiveVideo({ src: videoSrc, title, poster });
+  const handleViewMedia = (src: string, type: 'video' | 'image', title: string, poster?: string) => {
+    setActiveMedia({ src, type, title, poster });
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setActiveVideo(null);
+    setActiveMedia(null);
   };
 
   return (
@@ -277,6 +347,28 @@ export function ProjectsSection() {
         {/* Section title */}
         <div className="text-center mb-16">
           <LightMessage message="MY WORKS" className="mb-8" />
+
+          {/* Category Navigation Pills */}
+          <div className="flex flex-wrap justify-center gap-4 mt-8 mb-12">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => {
+                  const el = document.getElementById(`category-${category.id}`);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="px-8 py-3 md:px-10 md:py-4 rounded-full border border-primary/30 bg-background/50 backdrop-blur-sm 
+                         text-primary font-retro text-base md:text-lg uppercase tracking-wide hover:bg-primary/20 
+                         hover:border-primary/80 transition-all duration-300 shadow-[0_0_10px_rgba(229,9,20,0.1)]
+                         hover:shadow-[0_0_15px_rgba(229,9,20,0.3)]"
+              >
+                {category.title}
+              </button>
+            ))}
+          </div>
+
           <p className="font-retro text-xl text-muted-foreground max-w-2xl mx-auto">
             This collection represents my approach to turning content into experience — designing conversion-focused websites, distinctive typography, interactive prototypes, and motion graphics.
           </p>
@@ -284,23 +376,25 @@ export function ProjectsSection() {
 
         {/* Category Sections */}
         {categories.map((category, index) => (
-          <CategorySection
-            key={category.id}
-            category={category}
-            index={index}
-            onPlayVideo={handlePlayVideo}
-          />
+          <div key={category.id} id={`category-${category.id}`}>
+            <CategorySection
+              category={category}
+              index={index}
+              onViewMedia={handleViewMedia}
+            />
+          </div>
         ))}
       </div>
 
-      {/* Video Modal */}
-      {activeVideo && (
+      {/* Video/Image Modal */}
+      {activeMedia && (
         <VideoModal
           isOpen={modalOpen}
           onClose={handleCloseModal}
-          videoSrc={activeVideo.src}
-          posterSrc={activeVideo.poster}
-          title={activeVideo.title}
+          src={activeMedia.src}
+          type={activeMedia.type}
+          posterSrc={activeMedia.poster}
+          title={activeMedia.title}
         />
       )}
     </section>

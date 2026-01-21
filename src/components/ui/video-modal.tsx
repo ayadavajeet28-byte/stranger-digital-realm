@@ -5,12 +5,13 @@ import { createPortal } from 'react-dom';
 interface VideoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  videoSrc: string;
+  src: string;
+  type?: 'video' | 'image';
   posterSrc?: string;
   title?: string;
 }
 
-export function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title }: VideoModalProps) {
+export function VideoModal({ isOpen, onClose, src, type = 'video', posterSrc, title }: VideoModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,16 +22,18 @@ export function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title }: Vide
       setIsLoading(true);
       setHasError(false);
     }
-  }, [isOpen, videoSrc]);
+  }, [isOpen, src]);
 
   useEffect(() => {
-    if (isOpen && videoRef.current && !hasError) {
+    if (type === 'video' && isOpen && videoRef.current && !hasError) {
       videoRef.current.play().catch(() => {
         // Autoplay failed, user will need to click play
         setIsLoading(false);
       });
+    } else if (type === 'image' && isOpen) {
+      // specific logic for image if needed
     }
-  }, [isOpen, hasError]);
+  }, [isOpen, hasError, type]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -51,7 +54,7 @@ export function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title }: Vide
   }, [isOpen, onClose]);
 
   const handleClose = () => {
-    if (videoRef.current) {
+    if (type === 'video' && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
@@ -64,11 +67,11 @@ export function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title }: Vide
     }
   };
 
-  const handleVideoCanPlay = () => {
+  const handleMediaLoaded = () => {
     setIsLoading(false);
   };
 
-  const handleVideoError = () => {
+  const handleMediaError = () => {
     setIsLoading(false);
     setHasError(true);
   };
@@ -89,64 +92,64 @@ export function VideoModal({ isOpen, onClose, videoSrc, posterSrc, title }: Vide
       <button
         onClick={handleClose}
         className="absolute top-4 right-4 p-3 rounded-full bg-card/80 text-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-300 z-10 glow-red"
-        aria-label="Close video"
+        aria-label="Close modal"
       >
         <X className="w-6 h-6" />
       </button>
 
-      {/* Video container */}
-      <div className="relative max-w-5xl w-full max-h-[90vh] animate-scale-in">
+      {/* Media container */}
+      <div className="relative max-w-5xl w-full max-h-[90vh] animate-scale-in flex flex-col items-center">
         {/* Title */}
         {title && (
-          <h3 className="font-display text-2xl text-primary mb-4 text-center tracking-wider">
+          <h3 className="font-display text-2xl text-primary mb-4 text-center tracking-wider bg-background/50 px-4 py-1 rounded-full backdrop-blur-sm">
             {title}
           </h3>
         )}
 
-        {/* Video */}
-        <div className="relative rounded-lg overflow-hidden border border-primary/30 glow-red">
+        {/* Media Content */}
+        <div className={`relative rounded-lg overflow-hidden border border-primary/30 glow-red ${type === 'image' ? 'w-auto h-auto max-w-full' : 'w-full'}`}>
           {/* Loading overlay */}
           {isLoading && !hasError && (
-            <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
-              {posterSrc && (
-                <img 
-                  src={posterSrc} 
-                  alt={title || 'Video thumbnail'} 
-                  className="absolute inset-0 w-full h-full object-contain"
-                />
-              )}
+            <div className="absolute inset-0 flex items-center justify-center bg-background z-10 min-h-[200px]">
               <div className="absolute inset-0 bg-background/50 flex items-center justify-center">
                 <Loader2 className="w-12 h-12 text-primary animate-spin" />
               </div>
             </div>
           )}
 
-          {/* Error state - show poster as fallback */}
-          {hasError && posterSrc && (
-            <div className="relative">
-              <img 
-                src={posterSrc} 
-                alt={title || 'Video thumbnail'} 
-                className="w-full h-auto max-h-[80vh] object-contain"
-              />
-              <div className="absolute inset-0 flex items-center justify-center bg-background/70">
-                <p className="font-retro text-lg text-muted-foreground">Video failed to load</p>
+          {/* Error state */}
+          {hasError && (
+            <div className="relative min-h-[300px] w-full bg-muted flex items-center justify-center">
+              <div className="text-center p-6">
+                <p className="font-retro text-lg text-muted-foreground mb-2">Failed to load media</p>
+                <p className="text-sm text-muted-foreground/50">{src}</p>
               </div>
             </div>
           )}
 
           {/* Video element */}
-          {!hasError && (
+          {!hasError && type === 'video' && (
             <video
               ref={videoRef}
-              src={videoSrc}
+              src={src}
               poster={posterSrc}
               className="w-full h-auto max-h-[80vh] object-contain bg-background"
               controls
               playsInline
               preload="metadata"
-              onCanPlay={handleVideoCanPlay}
-              onError={handleVideoError}
+              onCanPlay={handleMediaLoaded}
+              onError={handleMediaError}
+            />
+          )}
+
+          {/* Image element */}
+          {!hasError && type === 'image' && (
+            <img
+              src={src}
+              alt={title || 'Full view'}
+              className="w-full h-auto max-h-[80vh] object-contain bg-background"
+              onLoad={handleMediaLoaded}
+              onError={handleMediaError}
             />
           )}
         </div>

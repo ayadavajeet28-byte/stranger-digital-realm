@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useAppStore } from '@/store/useAppStore';
-import { Volume2, VolumeX, Monitor, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { UpsideDownScene } from '@/components/3d/UpsideDownScene';
 import portalBg from '@/assets/upside-down-portal.jpg';
 
@@ -10,15 +10,15 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ isOverlay = false }: HeroSectionProps) {
-  const { soundEnabled, setSoundEnabled, setHasEntered, hasEntered } = useAppStore();
+  const { setHasEntered, hasEntered } = useAppStore();
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (!titleRef.current) return;
-    
+
     gsap.set(titleRef.current, { opacity: 1 });
-    
+
     const tl = gsap.timeline();
     tl.from(titleRef.current.querySelectorAll('span'), {
       opacity: 0,
@@ -35,7 +35,7 @@ export function HeroSection({ isOverlay = false }: HeroSectionProps) {
 
   const handleEnter = () => {
     if (!isOverlay) return;
-    
+
     setHasEntered(true);
     gsap.to(heroRef.current, {
       opacity: 0,
@@ -57,33 +57,33 @@ export function HeroSection({ isOverlay = false }: HeroSectionProps) {
     : "min-h-screen flex flex-col items-center justify-center overflow-hidden relative";
 
   return (
-    <div 
+    <div
       ref={heroRef}
       id={isOverlay ? undefined : "hero"}
       className={wrapperClasses}
     >
       {/* Background Image - Preloaded */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${portalBg})` }}
       />
-      
+
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-background/40" />
-      
+
       {/* 3D Particles */}
       <UpsideDownScene intensity={0.5} />
-      
+
       {/* Fog overlay */}
       <div className="absolute inset-0 fog-overlay pointer-events-none" />
-      
+
       {/* Scanlines */}
       <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
-      
+
       {/* Main content */}
       <div className="relative z-10 text-center px-4">
         {/* Title */}
-        <h1 
+        <h1
           ref={titleRef}
           className="mb-8"
         >
@@ -101,29 +101,6 @@ export function HeroSection({ isOverlay = false }: HeroSectionProps) {
         {/* Show controls only on overlay, scroll hint on inline */}
         {isOverlay ? (
           <div className="space-y-6 animate-fade-in-up">
-            {/* Sound toggle */}
-            <div className="flex items-center justify-center gap-3 text-muted-foreground">
-              <button
-                onClick={() => setSoundEnabled(!soundEnabled)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-primary/30 hover:border-primary hover:text-primary transition-all duration-300"
-              >
-                {soundEnabled ? (
-                  <Volume2 className="w-5 h-5" />
-                ) : (
-                  <VolumeX className="w-5 h-5" />
-                )}
-                <span className="font-retro text-lg">
-                  {soundEnabled ? 'Sound On' : 'Turn on sound'}
-                </span>
-              </button>
-            </div>
-
-            {/* Desktop recommendation */}
-            <div className="flex items-center justify-center gap-2 text-muted-foreground font-retro text-lg">
-              <Monitor className="w-5 h-5" />
-              <span>Best experienced on desktop</span>
-            </div>
-
             {/* Enter button */}
             <button
               onClick={handleEnter}
@@ -152,7 +129,7 @@ export function HeroSection({ isOverlay = false }: HeroSectionProps) {
         <div className="absolute top-8 left-8 w-3 h-3 rounded-full bg-light-blue christmas-light" style={{ animationDelay: '0.3s' }} />
         <div className="absolute top-12 left-4 w-3 h-3 rounded-full bg-light-yellow christmas-light" style={{ animationDelay: '0.6s' }} />
       </div>
-      
+
       <div className="absolute top-0 right-0 w-32 h-32 opacity-50">
         <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-light-green christmas-light" />
         <div className="absolute top-8 right-8 w-3 h-3 rounded-full bg-light-pink christmas-light" style={{ animationDelay: '0.3s' }} />
