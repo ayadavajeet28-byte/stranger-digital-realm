@@ -16,7 +16,7 @@ const tools = [
 const contactInfo = {
   email: 'mohantyelisha2@gmail.com',
   phone: '7751847127',
-  whatsapp: '8658487643',
+  whatsapp: '+91 86584 80643',
 };
 
 export function CreditsSection() {
@@ -78,7 +78,7 @@ export function CreditsSection() {
                 {contactInfo.email}
               </span>
             </a>
-            
+
             <a
               href={`tel:${contactInfo.phone}`}
               className="group flex flex-col items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300"
@@ -89,9 +89,9 @@ export function CreditsSection() {
                 {contactInfo.phone}
               </span>
             </a>
-            
+
             <a
-              href={`https://wa.me/${contactInfo.whatsapp}`}
+              href={`https://wa.me/${contactInfo.whatsapp.replace(/[^0-9]/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex flex-col items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-all duration-300"
