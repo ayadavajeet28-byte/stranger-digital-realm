@@ -8,6 +8,7 @@ import { VideoModal } from '@/components/ui/video-modal';
 // Import work images
 import workIllustrationCombined from '@/assets/work-illustration-combined.png';
 import workMotionVideo from '@/assets/vedio.mp4';
+import page8Image from '@/assets/Page 8.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,7 +46,8 @@ const categories = [
     title: 'Typography / Branding',
     description: 'Where information meets visual character. Conversion-focused websites with distinctive typography.',
     items: [
-      { id: 3, image: workIllustrationCombined, title: 'Typography & Web Design' },
+      { id: 3, image: page8Image, title: 'Typography & Web Design' },
+
     ],
   },
 ];
@@ -84,7 +86,7 @@ function CategorySection({ category, index, onViewMedia }: CategorySectionProps)
   const isConstrainedWidth = ['illustration', 'typography', 'motion'].includes(category.id);
 
   return (
-    <div ref={sectionRef} className="pb-40 last:pb-0">
+    <div ref={sectionRef}>
       {/* Category Header */}
       <div className="mb-16">
         <h3
@@ -93,7 +95,7 @@ function CategorySection({ category, index, onViewMedia }: CategorySectionProps)
         >
           {category.title}
         </h3>
-        <p className="font-retro text-muted-foreground mt-4 max-w-2xl">
+        <p className="font-retro text-lg md:text-xl text-muted-foreground mt-4 max-w-4xl">
           {category.description}
         </p>
       </div>
@@ -338,18 +340,18 @@ export function ProjectsSection() {
     <section
       ref={sectionRef}
       id="projects"
-      className="min-h-screen py-20 px-4 relative"
+      className="min-h-screen pt-32 pb-20 px-4 relative"
     >
       {/* Background effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/10 to-transparent pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Section title */}
         <div className="text-center mb-16">
           <LightMessage message="MY WORKS" className="mb-8" />
 
           {/* Category Navigation Pills */}
-          <div className="flex flex-wrap justify-center gap-4 mt-8 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mt-12 mb-12">
             {categories.map((category) => (
               <button
                 key={category.id}
@@ -376,7 +378,7 @@ export function ProjectsSection() {
 
         {/* Category Sections */}
         {categories.map((category, index) => (
-          <div key={category.id} id={`category-${category.id}`}>
+          <div key={category.id} id={`category-${category.id}`} className="mb-10 last:mb-0">
             <CategorySection
               category={category}
               index={index}
