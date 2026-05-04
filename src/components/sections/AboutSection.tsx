@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { LightMessage } from '@/components/decorative/ChristmasLights';
-import elishaProfile from '@/assets/elisha-profile.jpg';
+import elishaProfile from '@/assets/elisha-profile1.jpeg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -81,10 +81,16 @@ export function AboutSection() {
                 
                 <div className="font-retro text-lg md:text-xl text-foreground/90 leading-relaxed space-y-4">
                   <p>
-                    I'm Elisha Mohanty — a multidisciplinary UI/UX Designer, Graphic Designer, Illustrator, Motion Designer, and Dashboard Specialist. I blend design, technology, and storytelling to create user-centric experiences through intuitive interfaces, expressive illustrations, and impactful motion visuals.
+                    I'm Elisha Mohanty — a multidisciplinary designer working across UI/UX, graphic design, illustration, motion, and data dashboards. I combine design, technology, and storytelling to build user-centric experiences that are intuitive, engaging, and purposeful.
                   </p>
                   <p className="text-muted-foreground">
-                    Skilled in Figma, Adobe XD, Adobe Creative Suite, Tableau, and Power BI, I deliver solutions that are both visually compelling and results driven. Curious, creative, and innovation-led — I design experiences people remember.
+                    I also work at the intersection of design and growth — applying social media strategy and growth marketing to create not just visuals, but outcomes.
+                  </p>
+                  <p className="text-muted-foreground">
+                    With tools like Figma, Adobe XD, Adobe Creative Suite, Tableau, and Power BI, I design solutions that balance aesthetics with performance.
+                  </p>
+                  <p className="text-muted-foreground">
+                    I focus on clarity, usability, and impact — because good design isn't just seen, it works.
                   </p>
                 </div>
               </div>
